@@ -58,7 +58,7 @@ jobs:
       - name: Build with Hugo
         # --source 指定了你的 hugo.yaml 在 store 目录下
         # --destination 指定把编译结果输出到总线需要的虚拟位置
-        run: hugo --source . --destination ../public --minify
+        run: hugo --source . --destination ./public --minify
 
       # 6. 打包静态编译出来的结果
       - name: Upload artifact
