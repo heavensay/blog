@@ -1,0 +1,72 @@
+name: Deploy Hugo site to Pages
+
+on:
+  push:
+    branches:
+      - master # ⚡ 匹配你本地的默认分支名（如果是 main 请改为 main）
+
+# 赋予该流水线发布到 GitHub Pages 的核心权限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 如果有新的推送，自动取消正在排队的老编译任务
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 拉取仓库代码
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive # ⚡ 核心：自动拉取你刚刚配置的 Git 子模块主题
+
+      # 2. 修复软链接在 Linux 虚拟环境中的特殊问题
+      # 因为你用的是软链接把本地 /usr/md 链了进去，推送到 GitHub 后它在云端可能由于找不到绝对路径而失效。
+      # 这行脚本可以把“软链接”在编译前强行转回“真实的实体文件夹”。
+      #- name: Fix content symbolic link
+      #  run: |
+      #    if [ -L "store/content/posts" ]; then
+      #      echo "发现软链接指针，正在将其转换为实体目录以确保云端顺利编译..."
+      #      LINK_TARGET=$(readlink store/content/posts)
+      #      rm store/content/posts
+      #      # 兼容处理：如果由于路径断开找不到目标，直接转成普通空目录防止报错崩溃
+      #      mkdir -p store/content/posts
+      #    fi
+
+      # 3. 初始化并配置 GitHub Pages 基础设施
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      # 4. 载入云端 Hugo 环境
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest' # 始终使用最新的稳定版 Hugo
+          extended: true         # ⚡ 开启扩展版（支持 Sass/SCSS 编译，Ananke主题必须打开）
+
+      # 5. 执行静态编译
+      - name: Build with Hugo
+        # --source 指定了你的 hugo.yaml 在 store 目录下
+        # --destination 指定把编译结果输出到总线需要的虚拟位置
+        run: hugo --source . --destination ../public --minify
+
+      # 6. 打包静态编译出来的结果
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+      # 7. 部署到 GitHub Pages 服务器，完成公网发布
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
