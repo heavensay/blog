@@ -57,19 +57,33 @@ jobs:
       #每个目录自动生成_index.md文件，用于左侧目录树状显示，否则hugo默认是平铺；
       - name: Generate _index.md
         run: |
-          find content/docs -type d | while read dir; do
+          find content/docs -mindepth 1 -type d | while read -r dir; do
+            dir_name=$(basename "$dir")
+            
+            # 将名称转为纯小写进行资源黑名单比对
+            low_name=$(echo "$dir_name" | tr '[:upper:]' '[:lower:]')
+            
+            # 精准跳过不需要生成 _index.md 的资源/隐藏文件夹
+            if [ "$low_name" = "image" ] || [ "$low_name" = "images" ] || \
+               [ "$low_name" = "asset" ] || [ "$low_name" = "assets" ] || \
+               [ "$low_name" = "assert" ] || [ "$low_name" = "asserts" ]; then
+              echo "Skip resource directory: $dir_name"
+              continue
+            fi
+            
+            # 排除以 . 开头的隐藏文件夹
+            case "$dir_name" in
+              .*) continue ;;
+            esac
+            
             index="$dir/_index.md"
-
+            
+            # 如果没有 _index.md，则安全补全骨架
             if [ ! -f "$index" ]; then
-              title=$(basename "$dir")
-
-              cat > "$index" <<EOF
----
-title: "$title"
-cascade:
-  type: docs
----
-EOF
+              echo "Auto generating _index.md for: $dir_name"
+              
+              # 🌟 使用 printf 完美代替 cat <<EOF，用 \n 换行，100% 免疫 YAML 缩进混乱
+              printf -- "---\ntitle: \"%s\"\ntype: \"docs\"\nlayout: \"docs\"\n---\n" "$dir_name" > "$index"
             fi
           done
 
