@@ -1,0 +1,10 @@
+services:
+  hugo:
+    image: hugomods/hugo:latest
+    ports:
+      - "1313:1313"
+    volumes:
+      - /usr/local/docker-data/hugo/my-blog-site:/src
+    working_dir: /src #关键点：确保容器在挂载的目录下执行命令
+    entrypoint: ["/bin/sh", "-c"]
+    command: ./hugo-start.sh

@@ -1,0 +1,11 @@
+{
+ "compilerOptions": {
+  "baseUrl": ".",
+  "paths": {
+   "*": [
+    "../themes/bootstrap/js/*",
+    "../themes/hugo-mod-jslibs-dist/popperjs/package/dist/cjs/*"
+   ]
+  }
+ }
+}

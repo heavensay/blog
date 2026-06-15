@@ -1,3 +1,15 @@
 [submodule "themes/ananke"]
 	path = themes/ananke
 	url = https://github.com/theNewDynamic/gohugo-theme-ananke
+[submodule "themes/lotusdocs"]
+	path = themes/lotusdocs
+	url = https://github.com/colinwilson/lotusdocs
+[submodule "themes/hugo-mod-bootstrap-scss"]
+	path = themes/hugo-mod-bootstrap-scss
+	url = https://github.com/gohugoio/hugo-mod-bootstrap-scss
+[submodule "themes/hugo-mod-jslibs-dist"]
+	path = themes/hugo-mod-jslibs-dist
+	url = https://gitclone.com/github.com/gohugoio/hugo-mod-jslibs-dist
+[submodule "themes/bootstrap"]
+	path = themes/bootstrap
+	url = https://github.com/twbs/bootstrap

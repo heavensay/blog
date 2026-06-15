@@ -54,6 +54,25 @@ jobs:
           hugo-version: 'latest' # 始终使用最新的稳定版 Hugo
           extended: true         # ⚡ 开启扩展版（支持 Sass/SCSS 编译，Ananke主题必须打开）
 
+      #每个目录自动生成_index.md文件，用于左侧目录树状显示，否则hugo默认是平铺；
+      - name: Generate _index.md
+        run: |
+          find content/docs -type d | while read dir; do
+            index="$dir/_index.md"
+
+            if [ ! -f "$index" ]; then
+              title=$(basename "$dir")
+
+              cat > "$index" <<EOF
+---
+title: "$title"
+cascade:
+  type: docs
+---
+EOF
+            fi
+          done
+
       # 5. 执行静态编译
       - name: Build with Hugo
         # --source 指定了你的 hugo.yaml 在 store 目录下
