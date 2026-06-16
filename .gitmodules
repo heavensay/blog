@@ -13,3 +13,6 @@
 [submodule "themes/bootstrap"]
 	path = themes/bootstrap
 	url = https://github.com/twbs/bootstrap
+[submodule "content/blog-content"]
+	path = content/blog-content
+	url = https://github.com/heavensay/blog-content.git
