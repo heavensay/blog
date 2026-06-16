@@ -1,0 +1,33 @@
+{{ define "main" }}
+
+<!-- HERO -->
+<!-- <section class="hero">
+  <h1>{{ .Title }}</h1>
+  <p class="desc">{{ .Params.description }}</p>
+
+  <div class="actions">
+    <a class="btn primary" href="/docs/getting-started/">开始阅读</a>
+    <a class="btn" href="https://github.com/xxx">GitHub</a>
+  </div>
+</section> -->
+
+<!-- 内容 -->
+<section class="content">
+  {{ .Content }}
+</section>
+
+<!-- 文档卡片 -->
+<section class="grid">
+  <h2>文档结构</h2>
+
+  <div class="cards">
+    {{ range .Pages }}
+      <a class="card" href="{{ .RelPermalink }}">
+        <h3>{{ .Title }}</h3>
+        <p>{{ .Summary }}</p>
+      </a>
+    {{ end }}
+  </div>
+</section>
+
+{{ end }}

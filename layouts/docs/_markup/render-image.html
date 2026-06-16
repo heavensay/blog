@@ -1,0 +1,44 @@
+{{- /* 1. 基础路径处理：解决 uglyURLs=false 导致的相对路径层级错位 */ -}}
+{{- $src := .Destination -}}
+{{- $isRemote := or (hasPrefix $src "http://") (hasPrefix $src "https://") -}}
+{{- $isAbsolute := hasPrefix $src "/" -}}
+
+{{/* 路径修补策略：只有当它既不是外链，也不是绝对路径时，才需要针对 uglyURLs=false 进行相对路径修正 */}}
+{{- if and (not $isRemote) (not $isAbsolute) -}}
+    {{- if hasPrefix $src "../" -}}
+        {{/* 针对跨目录相对路径，向前多补一级 */}}
+        {{- $src = printf "../%s" $src -}}
+    {{- else -}}
+        {{/* 针对同级或下级相对路径（如 images/...），同样自动向前多补一级 */}}
+        {{- $src = printf "../%s" $src -}}
+    {{- end -}}
+{{- end -}}
+
+
+{{- /* 2. 动态提取文件名：从路径中截取最后的文件名作为默认显示 */ -}}
+{{- $url := urls.Parse .Destination -}}
+{{- $fileName := path.Base $url.Path -}}
+
+{{- /* 3. 提取文件后缀并转换为小写，用于格式判断 */ -}}
+{{- $ext := lower (path.Ext .Destination) -}}
+
+{{- /* 4. 定义常见图片格式白名单 */ -}}
+{{- $imgExts := slice ".png" ".jpg" ".jpeg" ".gif" ".svg" ".webp" ".bmp" -}}
+
+{{- /* 5. 核心分流逻辑 */ -}}
+{{- if in $imgExts $ext -}}
+  {{- /* ----------------- 方案 A：图片文件，直接网页显示 ----------------- */ -}}
+  <img src="{{ $src | safeURL }}" alt="{{ .Text }}" {{ with .Title }}title="{{ . }}"{{ end }} />
+{{- else -}}
+  {{- /* ----------------- 方案 B：非图片附件，在线预览/下载 ----------------- */ -}}
+  {{- /* 确定最终要显示的文本：如果 Markdown 中写了描述则用描述，没写则直接显示文件名 */ -}}
+  {{- $displayText := .Text -}}
+  {{- if or (eq $displayText "") (eq $displayText .Destination) -}}
+    {{- $displayText = $fileName -}}
+  {{- end -}}
+  
+  {{- /* 渲染为超链接：去掉了 download 属性，允许浏览器直接打开预览；加上样式使其更美观 */ -}}
+  <a href="{{ $src | safeURL }}" target="_blank" rel="noopener" class="attachment-link" style="display: inline-flex; align-items: center; gap: 5px; color: #0076d6; text-decoration: underline;">
+    <span>{{ $displayText }}</span>
+  </a>
+{{- end -}}

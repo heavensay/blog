@@ -57,34 +57,40 @@ jobs:
       #每个目录自动生成_index.md文件，用于左侧目录树状显示，否则hugo默认是平铺；
       - name: Generate _index.md
         run: |
-          find content/docs -mindepth 1 -type d | while read -r dir; do
-            dir_name=$(basename "$dir")
+          # 1. 动态抓取 content/ 下的所有一级子目录（如 docs, blog-content），排除了 content 根目录自身
+          find content -maxdepth 1 -type d ! -path "content" | while read -r base_dir; do
             
-            # 将名称转为纯小写进行资源黑名单比对
-            low_name=$(echo "$dir_name" | tr '[:upper:]' '[:lower:]')
-            
-            # 精准跳过不需要生成 _index.md 的资源/隐藏文件夹
-            if [ "$low_name" = "image" ] || [ "$low_name" = "images" ] || \
-               [ "$low_name" = "asset" ] || [ "$low_name" = "assets" ] || \
-               [ "$low_name" = "assert" ] || [ "$low_name" = "asserts" ]; then
-              echo "Skip resource directory: $dir_name"
-              continue
-            fi
-            
-            # 排除以 . 开头的隐藏文件夹
-            case "$dir_name" in
-              .*) continue ;;
-            esac
-            
-            index="$dir/_index.md"
-            
-            # 如果没有 _index.md，则安全补全骨架
-            if [ ! -f "$index" ]; then
-              echo "Auto generating _index.md for: $dir_name"
+            # 2. 深入每个一级目录向下递归遍历所有子文件夹
+            find "$base_dir" -type d | while read -r dir; do
+              dir_name=$(basename "$dir")
               
-              # 🌟 使用 printf 完美代替 cat <<EOF，用 \n 换行，100% 免疫 YAML 缩进混乱
-              printf -- "---\ntitle: \"%s\"\ntype: \"docs\"\nlayout: \"docs\"\n---\n" "$dir_name" > "$index"
-            fi
+              # 将名称转为纯小写进行资源黑名单比对
+              low_name=$(echo "$dir_name" | tr '[:upper:]' '[:lower:]')
+              
+              # 3. 精准跳过不需要生成 _index.md 的资源/附件/隐藏文件夹（新增了 attach-files 过滤）
+              if [ "$low_name" = "attach-files" ] || \
+                 [ "$low_name" = "image" ]        || [ "$low_name" = "images" ] || \
+                 [ "$low_name" = "asset" ]        || [ "$low_name" = "assets" ] || \
+                 [ "$low_name" = "assert" ]       || [ "$low_name" = "asserts" ]; then
+                echo "Skip resource directory: $dir"
+                continue
+              fi
+              
+              # 排除以 . 开头的隐藏文件夹
+              case "$dir_name" in
+                .*) continue ;;
+              esac
+              
+              index="$dir/_index.md"
+              
+              # 4. 如果没有 _index.md，则安全补全骨架
+              if [ ! -f "$index" ]; then
+                echo "Auto generating _index.md for: $dir"
+                
+                # 🌟 使用 printf 完美代替 cat <<EOF，用 \n 换行，100% 免疫 YAML 缩进混乱
+                printf -- "---\ntitle: \"%s\"\ntype: \"docs\"\nlayout: \"docs\"\n---\n" "$dir_name" > "$index"
+              fi
+            done
           done
 
       # 5. 执行静态编译
