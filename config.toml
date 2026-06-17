@@ -1,5 +1,4 @@
-baseURL = 'https://heavensay.github.io/'
-defaultContentLanguage = "zh-cn"
+baseURL = 'https://heavensay.github.io/blog'
 title = '技术blog'
 #theme= "ananke"
 hasCJKLanguage = true # 开启中文完美分词与字数统计
@@ -44,22 +43,17 @@ theme = "lotusdocs"   #指定 LotusDocs 主题
     target = "content"
 
   [[module.mounts]]
-    source = "store/blog-content/技术笔记"
-    target = "content/blog/tech"
+    #挂载除了template目录文件外的所有其他文件
+    files = ['! template/*', '**/*']
+    source = "store/blog-content"
+    target = "content/tech"
 
-  [[module.mounts]]
-    source = "store/blog-content/knowledge-test"
-    target = "content/blog/knowledge-test"
-
-  [[module.mounts]]
-    source = "store/blog-content/attach-files"
-    target = "content/blog/attach-files"
 
 # ============================================================================
 # 2. 目录与多分类逻辑 (Content Logic)
 # ============================================================================
 # 告诉 Hugo 哪些目录的内容需要作为主干平铺和展示
-mainSections = ["docs", "posts", "blog", "blog-content", "wiz-note"]
+mainSections = ["docs", "posts", "tech", "blog-content", "wiz-note"]
 
 # 禁用无用的标签/分类聚合页，完全交由文档树管理
 disableKinds = ["taxonomy", "term"]
@@ -97,7 +91,7 @@ disableKinds = ["taxonomy", "term"]
 	weight = 40
 
 [languages.zh-cn]
-	languageName = "简体中文"
+	label = "简体中文"
 	weight = 1
 
 [frontmatter]
@@ -145,7 +139,7 @@ disableKinds = ["taxonomy", "term"]
 
 # ⚡ 核心：LotusDocs 深度自定义参数
 [params.lotusdocs]
-	repo = "https://github.com/heavensay" # 你的 GitHub 仓库
+	repo = "https://github.com/heavensay/blog" # 你的 GitHub 仓库
 	branch = "master"
 
     # 顶部导航条高级设置
@@ -179,4 +173,4 @@ disableKinds = ["taxonomy", "term"]
   type = "docs"
   layout = "single"
   [cascade._target]
-    path = "/blog/**"
+    path = "/tech/**"
