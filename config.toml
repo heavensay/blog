@@ -1,6 +1,6 @@
 baseURL = 'https://heavensay.github.io/'
 defaultContentLanguage = "zh-cn"
-title = 'blog site title'
+title = '技术blog'
 #theme= "ananke"
 hasCJKLanguage = true # 开启中文完美分词与字数统计
 theme = "lotusdocs"   #指定 LotusDocs 主题
@@ -39,27 +39,27 @@ theme = "lotusdocs"   #指定 LotusDocs 主题
   [[module.imports]]
     path = "github.com/twbs/bootstrap"
 
-  # 3. 如果你的主项目根目录下还有其他本地的 content 内容（比如普通的本地页面），需要一并手动挂载回来：
   [[module.mounts]]
     source = "content"
     target = "content"
 
-  # 2. 自定义目录挂载
   [[module.mounts]]
-    source = "blog-content/knowledge-test"    #源路径：指向子模块中你想要的那个文件夹
-    target = "content/tech-test"          #目标路径：挂载到网站中，对应的 URL 将是 /tech-test/
+    source = "store/blog-content/技术笔记"
+    target = "content/blog/tech"
 
-  # 2. 自定义目录挂载
   [[module.mounts]]
-    source = "blog-content/技术笔记"    #源路径：指向子模块中你想要的那个文件夹
-    target = "content/tech"          #目标路径：挂载到网站中，对应的 URL 将是 /tech/
+    source = "store/blog-content/knowledge-test"
+    target = "content/blog/knowledge-test"
 
+  [[module.mounts]]
+    source = "store/blog-content/attach-files"
+    target = "content/blog/attach-files"
 
 # ============================================================================
 # 2. 目录与多分类逻辑 (Content Logic)
 # ============================================================================
 # 告诉 Hugo 哪些目录的内容需要作为主干平铺和展示
-mainSections = ["docs", "posts", "blog-content", "wiz-note"]
+mainSections = ["docs", "posts", "blog", "blog-content", "wiz-note"]
 
 # 禁用无用的标签/分类聚合页，完全交由文档树管理
 disableKinds = ["taxonomy", "term"]
@@ -83,12 +83,12 @@ disableKinds = ["taxonomy", "term"]
 
 [[menu.primary]]
 	name = "AI"
-	url = "/tech/"
+	url = "/tech/技术笔记"
 	weight = 30
 
 [[menu.primary]]
 	name = "笔记测试"
-	url = "/tech-test/"
+	url = "/tech/knowledge-test"
 	weight = 30
 
 [[menu.primary]]
@@ -179,4 +179,4 @@ disableKinds = ["taxonomy", "term"]
   type = "docs"
   layout = "single"
   [cascade._target]
-    path = "/blog-content/**"
+    path = "/blog/**"
