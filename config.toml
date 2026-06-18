@@ -42,12 +42,17 @@ theme = "lotusdocs"   #指定 LotusDocs 主题
     source = "content"
     target = "content"
 
-  [[module.mounts]]
-    #挂载除了template目录文件外的所有其他文件
-    files = ['! template/*', '**/*']
-    source = "store/blog-content"
-    target = "content/tech"
+  # [[module.mounts]]
+  #   #挂载除了template目录文件外的所有其他文件
+  #   files = ['! template/**', '**']
+  #   source = "store/blog-content"
+  #   target = "content/tech"
 
+  [[module.mounts]]
+    #挂载除了template目录文件外的所有其他文件；blog-content仓库中的template目录是用于存放obsidian中的模版，不应该编译发布；
+    files = ['! template/**', '**']
+    source = "generated-content"  #store/blog-content->generated-content，最终以blog/tech路径来访问;
+    target = "content/tech"
 
 # ============================================================================
 # 2. 目录与多分类逻辑 (Content Logic)
@@ -114,7 +119,7 @@ disableKinds = ["taxonomy", "term"]
 [params]
 	description = "保持思考，记录沉淀。基于 Hugo & LotusDocs 构建的个人全功能知识库。"
 	# 强行把默认的 docs
-	docsSection = "docs"
+	docsSection = "tech"
 
 	author = "默认作者名"
 
@@ -132,7 +137,7 @@ disableKinds = ["taxonomy", "term"]
 
     # 🌟 核心规范 3：这才是真正控制【大首页】各模块隐藏的专属官方开关！
 [params.frontpage]
-	# 彻底关闭大首页上的左侧侧边栏、右侧大纲、面包屑导航（这3行在首页的权重最高）
+	# 彻底关闭大首页上的左侧侧边栏、右侧大纲、面包屑导航（这3行在首页的权重最高） 
 	sidebar = false
 	toc = false
 	breadcrumbs = false
@@ -165,12 +170,12 @@ disableKinds = ["taxonomy", "term"]
 [[cascade]]
   type = "docs"
   layout = "single"
-  [cascade._target]
+  [cascade.target]
     path = "/posts/**"
 
 # 第 2 个级联配置：针对 tech 目录
 [[cascade]]
   type = "docs"
   layout = "single"
-  [cascade._target]
+  [cascade.target]
     path = "/tech/**"

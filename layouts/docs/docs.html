@@ -70,7 +70,7 @@
 
         <ul class="list-group">
 
-        {{ range first 10 site.RegularPages }}
+        {{ range first 10 (.RegularPagesRecursive.ByLastmod.Reverse) }}
         <li class="list-group-item d-flex justify-content-between">
 
             <a href="{{ .RelPermalink }}">
