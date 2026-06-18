@@ -57,8 +57,8 @@ jobs:
       #每个目录自动生成_index.md文件，用于左侧目录树状显示，否则hugo默认是平铺；
       - name: Generate content with _index.md
         run: |
-          chmod +x scripts/generate-_index.sh
-          ./scripts/generate-_index.sh
+          chmod +x generate-_index.sh
+          ./generate-_index.sh
 
       # 5. 执行静态编译
       - name: Build with Hugo
