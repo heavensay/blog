@@ -75,25 +75,25 @@ disableKinds = ["taxonomy", "term"]
 	url = "/"
 	weight = 10
 
-[[menu.primary]]
-	name = "技术"
-	url = "/docs/"
-	weight = 20
+# [[menu.primary]]
+# 	name = "技术"
+# 	url = "/docs/"
+# 	weight = 20
 
 [[menu.primary]]
 	name = "AI"
-	url = "/tech/技术笔记"
+	url = "/tech/我的笔记/AI"
 	weight = 30
 
-[[menu.primary]]
-	name = "笔记测试"
-	url = "/tech/knowledge-test"
-	weight = 30
+# [[menu.primary]]
+# 	name = "笔记测试"
+# 	url = "/tech/knowledge-test"
+# 	weight = 30
 
-[[menu.primary]]
-	name = "笔记"
-	url = "/wiz-note/"
-	weight = 40
+# [[menu.primary]]
+# 	name = "笔记"
+# 	url = "/wiz-note/"
+# 	weight = 40
 
 [languages.zh-cn]
 	label = "简体中文"
