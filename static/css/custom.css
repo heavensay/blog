@@ -1,0 +1,147 @@
+/* 数学公式字号 */
+.katex {
+  font-size: 0.9rem;
+}
+
+/* Markdown 引用块，也就是以 > 开头的内容 */
+.docs-content .main-content blockquote {
+  font-size: 1rem;
+}
+
+/*这是因为浏览器会在 /、- 等位置自然换行；百分号编码的中文 URL（如 %E9%...）可能是一整段没有换行点的文本，所以会超出内容区。*/
+.docs-content .main-content a {
+  overflow-wrap: anywhere;
+}
+
+
+/*图片点击缩小放大*/
+.image-zoom-dialog {
+  position: fixed;
+  inset: 0;
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.86);
+}
+
+.image-zoom-dialog[open] {
+  display: block;
+}
+
+.image-zoom-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.86);
+  backdrop-filter: blur(3px);
+}
+
+.image-zoom-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.image-zoom-stage img {
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 2rem);
+  object-fit: contain;
+  transform-origin: center;
+  cursor: zoom-in;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 12px 36px rgba(0, 0, 0, 0.45));
+}
+
+.image-zoom-dialog.is-zoomed .image-zoom-stage img {
+  cursor: grab;
+}
+
+.image-zoom-dialog.is-dragging .image-zoom-stage img {
+  cursor: grabbing;
+}
+
+.image-zoom-toolbar {
+  position: absolute;
+  z-index: 2;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(35, 35, 35, 0.9);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+}
+
+.image-zoom-toolbar button {
+  display: grid;
+  min-width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  padding: 0 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: #fff;
+  background: transparent;
+  font: 500 0.95rem/1 system-ui, sans-serif;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.image-zoom-toolbar button:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.image-zoom-toolbar button:active {
+  transform: scale(0.94);
+}
+
+.image-zoom-toolbar button:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.image-zoom-toolbar [data-action="close"] {
+  margin-left: 0.2rem;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.3rem;
+}
+
+.image-zoom-toolbar [data-action="close"]:hover {
+  border-color: rgba(248, 113, 113, 0.45);
+  background: rgba(220, 38, 38, 0.8);
+}
+
+.image-zoom-toolbar [data-zoom-level] {
+  min-width: 3.5rem;
+  color: rgba(255, 255, 255, 0.85);
+  font: 500 0.82rem/1 system-ui, sans-serif;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 600px) {
+  .image-zoom-toolbar {
+    top: auto;
+    right: 50%;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    transform: translateX(50%);
+  }
+}

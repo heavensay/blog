@@ -6,7 +6,22 @@ theme = "lotusdocs"   #指定 LotusDocs 主题
 
 [markup.goldmark.renderer]
   unsafe = true
+  hardWraps = true
 
+#换行
+[markup.goldmark.extensions.passthrough]
+  enable = true
+
+#latex数学公式
+[markup.goldmark.extensions.passthrough.delimiters]
+  block = [['\[', '\]'], ['$$', '$$']]
+  inline = [['\(', '\)'], ['$', '$']]
+
+#标题1-6展示
+[markup.tableOfContents]
+  startLevel = 1
+  endLevel = 6
+  ordered = false  
 # ⚡ 核心修复：强行关闭 Go Modules 编译，改用主题自带的资产包
 # ============================================================================
 # 修复核心：将云端 Go Module 依赖强制映射到本地已下载的 Submodule 目录
@@ -177,5 +192,7 @@ disableKinds = ["taxonomy", "term"]
 [[cascade]]
   type = "docs"
   layout = "single"
+  [cascade.params]
+    katex = true #数学公式展示支持
   [cascade.target]
     path = "/tech/**"

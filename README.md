@@ -34,9 +34,10 @@ theme = "lotusdocs"   #指定 LotusDocs 主题
 ~~~
 
 # 自定义
-我们使用了lotus主题，并对其中一些页面进行了定制。一般定义内容我们都放到layouts/下面，具体路径跟theme/lotus主题保持一致；
+自定义主题：我们使用了lotus主题，并对其中一些页面进行了定制。一般定义内容我们都放到layouts/下面，具体路径跟theme/lotus主题保持一致；
 <img width="914" height="1214" alt="image" src="https://github.com/user-attachments/assets/8fbd7b2a-e19c-4a2f-97b4-574fca716d9f" />
 
+自定义css样式：自定义样式在static目录下面；
 
 ## 附件路径修复
 其中layouts/docs/_markup/render-image.html，和layouts/_default/_markup/render-image.html，用于附件路径渲染，修复md文档经过hugo发布后，路径层级多一层，附件访问404问题；  

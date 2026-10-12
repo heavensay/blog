@@ -28,7 +28,10 @@
 {{- /* 5. 核心分流逻辑 */ -}}
 {{- if in $imgExts $ext -}}
   {{- /* ----------------- 方案 A：图片文件，直接网页显示 ----------------- */ -}}
-  <img src="{{ $src | safeURL }}" alt="{{ .Text }}" {{ with .Title }}title="{{ . }}"{{ end }} />
+  <a href="{{ $src | safeURL }}" class="image-zoom" data-image-zoom>
+    <img src="{{ $src | safeURL }}" alt="{{ .Text }}" {{ with .Title }}title="{{ . }}"{{ end }} />
+  </a>
+  <!-- <img src="{{ $src | safeURL }}" alt="{{ .Text }}" {{ with .Title }}title="{{ . }}"{{ end }} /> -->
 {{- else -}}
   {{- /* ----------------- 方案 B：非图片附件，在线预览/下载 ----------------- */ -}}
   {{- /* 确定最终要显示的文本：如果 Markdown 中写了描述则用描述，没写则直接显示文件名 */ -}}
